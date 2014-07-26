@@ -1,0 +1,12 @@
+---
+- hosts: localenv
+  roles:
+    # - {role: common}
+    # - {role: java}
+    # - {role: postgres}
+    # - {role: nodejs}
+    # - {role: mongo}
+    # - {role: ruby}
+    - {role: nigix}
+    # - {role: server, local_code_base: "{{home_dir}}/product_mongo", remote_code_base: "https://github.com/sjkyspa/product_mongo.git"}
+

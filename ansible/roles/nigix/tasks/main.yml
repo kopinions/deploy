@@ -1,0 +1,27 @@
+---
+- name: install nginx
+  apt: name=nginx state=present
+  sudo: true
+
+- name: config nginx run dir
+  sudo: true
+  command: mkdir -p {{run_dir}}
+
+- name: config run_dir permission
+  sudo: true
+  file: path={{run_dir}} owner={{user}} group={{user}}  
+
+- name: create log dir
+  sudo: true
+  command: mkdir -p {{log_dir}}
+
+- name: change log dir permission
+  sudo: true
+  file: path={{log_dir}} owner={{user}} group={{user}}
+
+
+- name: copy nginx config file
+  sudo: true
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify:
+    - restart nginx

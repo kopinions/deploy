@@ -1,0 +1,11 @@
+---
+delete_default_vhost: false
+user: vagrant
+user_group: vagrant
+worker_processes: 2
+run_dir: /var/run/nginx
+pid: /var/run/nginx/nginx.pid
+worker_connections: 768
+log_dir: /var/log/nginx
+error_log: /home/vagrant/error_log
+access_log: /home/vagrant/access_log

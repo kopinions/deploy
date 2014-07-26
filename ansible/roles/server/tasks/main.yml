@@ -1,0 +1,15 @@
+---
+- name: pull code base
+  git: repo={{remote_code_base}} dest={{local_code_base}} update=yes
+
+- name: ensure known hosts
+  sudo_user: vagrant
+  shell: touch ~/.ssh/known_hosts
+
+- name: remove github.com from known host
+  sudo_user: vagrant
+  shell: ssh-keygen -R github.com
+
+- name: add remote ssh key
+  sudo_user: vagrant
+  shell: /usr/bin/ssh-keyscan -H github.com >> ~/.ssh/ssh_known_hosts

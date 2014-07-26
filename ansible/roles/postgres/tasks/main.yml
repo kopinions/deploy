@@ -1,0 +1,22 @@
+---
+- name: install postgres
+  apt: pkg={{item}} state=present update-cache=false
+  sudo: yes
+  with_items:
+    - postgresql
+    - postgresql-contrib
+    - python-psycopg2
+    - libpq-dev
+
+- name: Make sure postgres running
+  service: name=postgresql state=started enabled=yes
+
+- name: mange postgres user
+  sudo: yes
+  sudo_user: postgres
+  postgresql_user: name={{postgres_user}} password={{postgres_password}} role_attr_flags=SUPERUSER
+
+- name: create default db
+  sudo: yes
+  sudo_user: postgres
+  postgresql_db: name={{postgres_db_name}}

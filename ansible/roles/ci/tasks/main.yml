@@ -1,0 +1,18 @@
+---
+- name: copy go
+  sudo_user: vagrant
+  copy: src=/Users/twer/Downloads/go-server-14.1.0-18882.deb dest=~/ owner=vagrant
+- name: copy go agent
+  sudo_user: vagrant
+  copy: src=/Users/twer/Downloads/go-agent-14.1.0-18882.deb dest=~/ owner=vagrant
+- name:
+  sudo: true
+  apt: deb=/home/vagrant/go-agent-14.1.0-18882.deb dpkg_options=force-confdef
+  notify:
+    - start go-agent
+- name:
+  sudo: yes
+  service: name=go-agent state=started
+- name: start go-server
+  sudo: yes
+  service: name=go-server state=started

@@ -1,0 +1,22 @@
+---
+- name: Node.js | Package prerequisites for node.js
+  sudo: yes
+  apt: name=python-software-properties state=latest
+  tags: nodejs
+
+- name: Node.js | Add the node.js PPA
+  sudo: yes
+  apt_repository: repo='ppa:chris-lea/node.js'
+  tags: nodejs
+
+- name: Node.js | Update the apt cache for the new repository
+  sudo: yes
+  apt: update_cache=yes
+  tags: nodejs
+
+- name: Node.js | Install nodejs and npm
+  sudo: yes
+  apt: name={{item}} state=latest
+  tags: nodejs
+  with_items:
+    - nodejs

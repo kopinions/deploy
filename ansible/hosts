@@ -1,0 +1,14 @@
+local ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200
+
+ci ansible_ssh_host=127.0.0.1 ansible_ssh_port=2221
+
+
+[localenv]
+local
+
+[cienv]
+ci
+
+[all_groups:children]
+localenv
+cienv

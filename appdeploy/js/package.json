@@ -1,0 +1,17 @@
+{
+  "name": "project",
+  "version": "0.0.0",
+  "description": "project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "flightplan": "~0.4.1",
+    "gulp": "~3.8.6",
+    "gulp-exec": "~2.1.0",
+    "gulp-jasmine": "~0.2.0"
+  }
+}

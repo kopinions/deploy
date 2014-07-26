@@ -1,0 +1,9 @@
+{
+  "CHANGELOG": "faf88704b682fece9012e847f07ecf9f",
+  "Modulefile": "fd52e64f8f7151d8fd74a49374950d30",
+  "Puppetfile": "a475e6b5d25c4584c10e419515087dab",
+  "README.md": "e9b22e0185b62f0a0176510cf9d1d70c",
+  "files/java.preseed": "1b89c67b59fa03a9210a7b22a6b51b92",
+  "files/set_java_home.sh": "a3858fa7e9cda952b595bcd9a52f6b70",
+  "manifests/init.pp": "5deb3d60ae9dacecc931d9ca2ca1b153"
+}

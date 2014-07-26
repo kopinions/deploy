@@ -1,0 +1,114 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'ssh'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.5'
+
+    // for jersey
+    compile 'javax.ws.rs:javax.ws.rs-api:2.0'
+    compile 'org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.10.1'
+    compile 'org.glassfish.jersey.core:jersey-server:2.10.1'
+    compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.10.1'
+    testCompile "org.glassfish.jersey.test-framework:jersey-test-framework-core:2.10.1"
+    testCompile 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.10.1'
+
+    // for xml and json
+    compile "org.glassfish.jersey.media:jersey-media-moxy:2.10.1"
+    compile "org.glassfish.jersey.media:jersey-media-json-jackson:2.10.1"
+
+    // for rdms
+    // compile "org.postgresql:postgresql:9.3-1101-jdbc41"
+    // compile "org.mybatis:mybatis:3.2.7"
+
+    // for mongo
+    compile "org.mongodb:mongo-java-driver:2.12.2"
+    compile "org.mongodb.morphia:morphia:0.108"
+    testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.46.0"
+
+    // unit test
+    testCompile "org.mockito:mockito-core:1.9.5"
+    testCompile "junit:junit:4.10"
+}
+
+
+task (uberjar, type: Jar) {
+    description "package the uber jar"
+    classifier = "standalone"
+    println(sourceSets.main.output.classesDir)
+
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.resources)
+    from configurations.runtime.files.collect { zipTree(it) }
+
+    exclude("META-INF/*.FA")
+    exclude("META-INF/*.DSA")
+    exclude("META-INF/*.RSA")
+
+    manifest {
+        attributes 'Main-Class': 'org.tw.Server'
+    }
+}
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:0.1.7'
+    }
+}
+
+
+ssh {
+    config(StrictHostKeyChecking: 'no')
+}
+
+remotes {
+    vagrant {
+        host = 'localhost'
+        user = 'vagrant'
+        port = 2222
+        identity = file("/Users/twer/.vagrant.d/insecure_private_key")
+    }
+}
+
+
+task (deploy, dependsOn: uberjar) << {
+    logger.lifecycle("Deploying to $remotes.vagrant.host ")
+    logger.lifecycle("Copying $uberjar.archivePath.name to Be patient .. takes time ...")
+    sshexec {
+        session(remotes.vagrant) {
+            put(uberjar.archivePath.absolutePath, "/home/vagrant")
+            executeBackground 'nohup java -jar /home/vagrant/morphia-java-standalone.jar 1>/dev/null  2>&1 </dev/null &'
+        }
+    }
+}
+//
+//buildscript {
+//    repositories {
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath "org.flywaydb:flyway-gradle-plugin:3.0"
+//        classpath 'org.postgresql:postgresql:9.3-1101-jdbc41'
+//    }
+//}
+//
+//
+//apply plugin: 'flyway'
+//
+//flyway {
+//    driver = 'org.postgresql.Driver'
+//    url = 'jdbc:postgresql://localhost:5432/orderjersey'
+//    user = 'twer'
+//    password = ''
+//    locations = ['filesystem:src/main/resources/dbmigration']
+//    sqlMigrationPrefix = '0'
+//    sqlMigrationSeparator = '_'
+//}

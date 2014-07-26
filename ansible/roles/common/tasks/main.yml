@@ -1,0 +1,8 @@
+---
+- name: update apt
+  sudo: yes
+  apt: update_cache=yes
+
+- name: install git
+  sudo: yes
+  apt: name=git state=latest
