@@ -28,32 +28,32 @@
 #   always_apt_update    => false
 # }
 
-# stage { 'preinstall':
-#   before => Stage['main']
-# }
- 
-# class apt_get_update {
-#   exec { '/usr/bin/apt-get -y update': }
-# }
- 
-# class { 'apt_get_update':
-#   stage => preinstall
-# }
-
-
-
-class apt {
-  exec { "apt-update":
-    command => "/usr/bin/apt-get update"
-  }
-
-  # Ensure apt is setup before running apt-get update
-  Apt::Key <| |> -> Exec["apt-update"]
-  Apt::Source <| |> -> Exec["apt-update"]
-
-  # Ensure apt-get update has been run before installing any packages
-  Exec["apt-update"] -> Package <| |>
+stage { 'preinstall':
+  before => Stage['main']
 }
+ 
+class apt_get_update {
+  exec { '/usr/bin/apt-get -y update ': }
+}
+ 
+class { 'apt_get_update':
+  stage => preinstall
+}
+
+include apt
+
+# class apt {
+#   exec { "apt-update":
+#     command => "/usr/bin/apt-get update"
+#   }
+
+#   # Ensure apt is setup before running apt-get update
+#   Apt::Key <| |> -> Exec["apt-update"]
+#   Apt::Source <| |> -> Exec["apt-update"]
+
+#   # Ensure apt-get update has been run before installing any packages
+#   Exec["apt-update"] -> Package <| |>
+# }
 
 # install git
 # include git
