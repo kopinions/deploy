@@ -1,33 +1,35 @@
-# class db{
-# 	class { 'postgresql::server':
-# 		postgres_password => 'twer',
-# 		ip_mask_deny_postgres_user => '0.0.0.0/32',
-# 		ip_mask_allow_all_users    => '0.0.0.0/0',
-# 		listen_addresses           => '*'
-# 	}
-# 	postgresql::server::role { 'twer':
-# 	  password_hash => postgresql_password('twer', 'twer'),
-# 	}
-# 	postgresql::server::db { 'order':
-# 	  user     => 'twer',
-# 	  password => postgresql_password('twer', 'twer'),
-# 	}
-# }
+class db{
+	class { 'postgresql::server':
+		postgres_password => 'twer',
+		ip_mask_deny_postgres_user => '0.0.0.0/32',
+		ip_mask_allow_all_users    => '0.0.0.0/0',
+		listen_addresses           => '*'
+	}
+	postgresql::server::role { 'twer':
+	  password_hash => postgresql_password('twer', 'twer'),
+	}
+	postgresql::server::db { 'order':
+	  user     => 'twer',
+	  password => postgresql_password('twer', 'twer'),
+	}
+}
 
 
-# include rvm
+include rvm
 
-# rvm_system_ruby {
-# 	'ruby-2.1':
-# 		ensure      => 'present',
-# 		default_use => true;
-# }
+rvm_system_ruby {
+	'ruby-2.1':
+		ensure      => 'present',
+		default_use => true;
+}
 
 # apt update
 # class { 'apt':
 #   always_apt_update    => false
 # }
 
+
+# this works
 stage { 'preinstall':
   before => Stage['main']
 }
@@ -39,12 +41,16 @@ class apt_get_update {
 class { 'apt_get_update':
   stage => preinstall
 }
-
 include apt
+
+
+
+
+
 
 # class apt {
 #   exec { "apt-update":
-#     command => "/usr/bin/apt-get update"
+#     command => "/usr/bin/apt-get -y update"
 #   }
 
 #   # Ensure apt is setup before running apt-get update
@@ -56,12 +62,12 @@ include apt
 # }
 
 # install git
-# include git
+include git
 
 include java8
 
-# include mongodb
+include mongodb
 
-# class { 'nodejs':
-#  version => 'v0.10.25',
-# }
+class { 'nodejs':
+ version => 'v0.10.25',
+}
